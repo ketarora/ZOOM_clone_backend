@@ -293,7 +293,7 @@ def update_meeting(
 def delete_meeting(
     meeting_id: str,
     db: Annotated[Session, Depends(get_db)],
-)
+):
     meeting = _lookup_meeting(db, meeting_id)
     db.delete(meeting)
     db.commit()
