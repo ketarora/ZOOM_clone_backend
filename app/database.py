@@ -24,7 +24,7 @@ from app.config import settings
 
 engine = create_engine(
     settings.database_url,
-    connect_args={"check_same_thread": False},
+    connect_args={"check_same_thread": False} if settings.database_url.startswith("sqlite") else {},
     pool_pre_ping=True,
     echo=False,
 )
@@ -33,11 +33,12 @@ engine = create_engine(
 @event.listens_for(engine, "connect")
 def _configure_sqlite(dbapi_connection: object, _record: object) -> None:
     """Apply per-connection SQLite pragmas."""
-    cursor = dbapi_connection.cursor()  # type: ignore[union-attr]
-    cursor.execute("PRAGMA journal_mode=WAL")
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.execute("PRAGMA synchronous=NORMAL")
-    cursor.close()
+    if settings.database_url.startswith("sqlite"):
+        cursor = dbapi_connection.cursor()  # type: ignore[union-attr]
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.execute("PRAGMA synchronous=NORMAL")
+        cursor.close()
 
 
 # ---------------------------------------------------------------------------
