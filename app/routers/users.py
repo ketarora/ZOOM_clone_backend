@@ -96,3 +96,4 @@ def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
     db.delete(user)
     db.commit()
     logger.info("Deleted user id=%d", user_id)
+    return Response(status_code=204)
