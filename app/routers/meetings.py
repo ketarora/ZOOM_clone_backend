@@ -297,6 +297,7 @@ def delete_meeting(
     db.delete(meeting)
     db.commit()
     logger.info("Deleted meeting %s", meeting.meeting_id)
+    return Response(status_code=204)
 
 
 # ---------------------------------------------------------------------------
