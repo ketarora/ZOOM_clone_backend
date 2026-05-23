@@ -7,16 +7,13 @@ single person's presence in one meeting session and records:
   * **Identity** — optional FK to a registered ``User``; guests have ``user_id=NULL``
   * **Temporal** — ``joined_at`` / ``left_at`` (NULL while still in the room)
   * **Per-session state** — muted, camera, waiting-room admission, host flag
-
-``CHECK`` constraints enforce the boolean-ness of the flag columns at the
-database level (SQLite stores booleans as 0/1 integers).
 """
 
 from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -28,10 +25,6 @@ class Participant(Base):
         Index("ix_participants_meeting_id", "meeting_id"),
         Index("ix_participants_user_id", "user_id"),
         Index("ix_participants_joined_at", "joined_at"),
-        CheckConstraint("is_muted IN (0, 1)",      name="ck_participants_is_muted"),
-        CheckConstraint("is_camera_off IN (0, 1)", name="ck_participants_is_camera_off"),
-        CheckConstraint("is_admitted IN (0, 1)",   name="ck_participants_is_admitted"),
-        CheckConstraint("is_host IN (0, 1)",       name="ck_participants_is_host"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
