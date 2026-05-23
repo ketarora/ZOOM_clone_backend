@@ -287,12 +287,13 @@ def update_meeting(
 @router.delete(
     "/{meeting_id}",
     status_code=204,
+    response_class=Response,
     summary="Delete a meeting",
 )
 def delete_meeting(
     meeting_id: str,
     db: Annotated[Session, Depends(get_db)],
-) -> None:
+)
     meeting = _lookup_meeting(db, meeting_id)
     db.delete(meeting)
     db.commit()
