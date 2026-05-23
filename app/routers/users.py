@@ -89,9 +89,10 @@ def update_user(
 @router.delete(
     "/{user_id}",
     status_code=204,
+    response_class=Response,
     summary="Delete a user",
 )
-def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
+def delete_user(user_id: int, db: Session = Depends(get_db)):
     user = _get_user_or_404(db, user_id)
     db.delete(user)
     db.commit()
