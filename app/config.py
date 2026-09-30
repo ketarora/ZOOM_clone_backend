@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     # Public base URL used when generating invite links.
     # Override with the real domain in production (e.g. https://api.example.com).
-    base_url: str = "http://localhost:8000"
+    base_url: str = "https://zoom-clone-nine-indol.vercel.app"
 
     # CORS — comma-separated list of allowed origins, or "*" for all.
     cors_origins: str = "*"
